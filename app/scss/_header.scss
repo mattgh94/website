@@ -1,0 +1,68 @@
+@use '/util' as *;
+
+.header {
+
+    nav {
+        padding: 1.0625rem 1.5rem;
+    }
+
+    &__logo {
+        img {
+            width: 8.8125rem;
+            height: 1.375rem;
+        }
+    }
+
+    &__menu { //mobile menu
+        > span {
+            display: block;
+            width: rem(26);
+            height: 2px;
+            background-color: $darkBlue;
+            &:not(:last-child){
+                margin-bottom: 3px;
+            }
+        }
+    }
+
+    &__links {
+        a {
+            position: relative;
+            font-size: $font-small;
+            color: $grayishBlue;
+            transition: color 300ms ease-in-out;
+            &:not(:last-child){
+                margin-right: 32px;
+            }
+
+            &::before {
+                content: "";
+                display: block;
+                position: absolute;
+                height: 5px;
+                left: 0px;
+                right: 0px;
+                bottom: -30px;
+                background: $limeGreen;
+                opacity: 0;
+                transition: opacity 300ms ease-in-out;
+            }
+            &:hover {
+                color: $darkBlue;
+                &::before {
+                    opacity: 1;
+                }
+            }
+            
+        }
+    }
+
+    &__cta {
+        font-size: $font-small;
+        color: $white;
+        transition: opacity 300ms ease-in-out;
+        &:hover {
+            opacity:0.75;
+        }
+    }
+}
