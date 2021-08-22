@@ -8,8 +8,14 @@ const babel = require('gulp-babel');
 const terser = require('gulp-terser');
 const browsersync = require('browser-sync').create();
 
+// ts modules
+const ts = require("gulp-typescript");
+const sourcemaps = require('gulp-sourcemaps');
+
 // use dart-sass for @use
 // sass.compiler = require('dart-sass');
+
+
 
 // Sass Task
 function scssTask() {
@@ -26,6 +32,18 @@ function jsTask() {
         .pipe(terser())
         .pipe(dest('dist', { sourcemaps: '.' }));
 }
+
+// ts compile
+function tsTask() {
+    return src('app/ts/*.ts')
+    .pipe(sourcemaps.init())
+    .pipe(ts({
+        noImplicitAny: true,
+        outFile: 'tsoutput.js'
+    }))
+    .pipe(sourcemaps.write('.', { includeContent: false, sourceRoot: '../ts' }))
+    .pipe(dest('dist'));
+};
 
 // browserSync
 function browserSyncServe(cb) {
@@ -50,10 +68,10 @@ function browserSyncReload(cb) {
 // Watch Task
 function watchTask() {
     watch('*.html', browserSyncReload);
-    watch(['app/scss/**/*.scss', 'app/**/*.js'],
-    series(scssTask, jsTask, browserSyncReload)
+    watch(['app/scss/**/*.scss', 'app/**/*.js', 'app/**/*.ts'],
+    series(scssTask, jsTask, tsTask, browserSyncReload)
     );
 }
 
 // Default gulp taks
-exports.default = series(scssTask, jsTask, browserSyncServe, watchTask);
+exports.default = series(scssTask, jsTask, tsTask, browserSyncServe, watchTask);
